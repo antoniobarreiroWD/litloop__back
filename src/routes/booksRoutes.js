@@ -4,7 +4,7 @@ const { searchBooks, showPopularBooks, showBookDetails } = require('../controlle
 const router = express.Router();
 
 
-router.get('/', searchBooks);
+router.post('/search', searchBooks);
 
 router.get('/popular', showPopularBooks);
 

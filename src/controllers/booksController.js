@@ -1,32 +1,29 @@
- const { getBooksFromGoogle, getPopularBooks, getBookById } = require('../services/booksService');
-
+const { getBooksFromGoogle, getPopularBooks, getBookById } = require('../services/booksService');
 
 const searchBooks = async (req, res) => {
-  const { q } = req.query;
+  const { q = '', category = '', order = '' } = req.body;
 
-  if (!q) {
-      return res.status(400).json({ error: 'El parámetro "q" es requerido' });
+  
+  if (!q && !category && !order) {
+    return res.status(400).json({ error: 'Debe proporcionar al menos un parámetro de búsqueda o un criterio de ordenación.' });
   }
 
   try {
-      const books = await getBooksFromGoogle(q);
-      res.json({ books }); 
+    const books = await getBooksFromGoogle(q, category, order);
+    res.json({ books });
   } catch (error) {
-      res.status(500).json({ error: 'Error al consultar la API de Google Books' });
+    res.status(500).json({ error: 'Error al consultar la API de Google Books' });
   }
 };
 
 
-
 const showPopularBooks = async (req, res) => {
-    try {
-
-     
-        const books = await getPopularBooks();
-        res.json(books);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener los libros populares' });
-    }
+  try {
+    const books = await getPopularBooks();
+    res.json(books);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener los libros populares' });
+  }
 };
 
 const showBookDetails = async (req, res) => {
@@ -40,12 +37,10 @@ const showBookDetails = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
-    searchBooks,
-    showPopularBooks,
-    showBookDetails,
+  searchBooks,
+  showPopularBooks,
+  showBookDetails,
 };
- 
+
 
