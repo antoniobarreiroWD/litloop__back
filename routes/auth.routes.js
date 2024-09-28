@@ -5,6 +5,7 @@ const { login, signup, verify } = require('../controllers/auth.controller');
 
 
 
+
 router.all('/fail', (req, res) => {
   res.status(401).json({ message: 'Unauthorized' });
 });

@@ -12,6 +12,7 @@ passport.use(
       secretOrKey: 'secreto',
     },
     async function (jwtPayload, done) {
+      
       try {
         const user = await User.findById(jwtPayload.user);
         if (!user) {

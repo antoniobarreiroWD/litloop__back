@@ -13,7 +13,7 @@ const signup = async (req, res, next) => {
       email: req.body.email,
       password: passwordCrypt,
       username: req.body.username,
-      name: req.body.name,
+      
      
       
       
@@ -26,14 +26,17 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res) => {
+
   res.json({
-    token: jwt.sign({ user: req.user._id, role: req.user.role }, 'secreto', { expiresIn: '1d' }),
+    token: jwt.sign({ user: req.user._id }, 'secreto', { expiresIn: '1d' }),
   });
 };
 
 const verify = async (req, res) => {
   res.json(req.user);
 };
+
+
 
 module.exports = {
   signup,

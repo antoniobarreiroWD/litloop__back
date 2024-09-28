@@ -1,4 +1,14 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema, model } = mongoose;
+
+const bookSchema = new Schema({
+  bookId: { type: String, required: true }, 
+  title: String,
+  authors: [String],
+  publishedDate: String,
+  description: String,
+  publisher: String,
+});
 
 const userSchema = new Schema(
   {
@@ -8,11 +18,7 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
     },
-    name: {
-      type: String,
-      required: [true, 'A name is needed!'],
-      trim: true,
-    },
+   
     email: {
       type: String,
       required: [true, 'An email is needed'],
@@ -29,7 +35,7 @@ const userSchema = new Schema(
       salt: { type: String, required: true },
       hash: { type: String, required: true },
     },
-    
+    favoriteBooks: [bookSchema], 
   },
   {
     timestamps: true,
