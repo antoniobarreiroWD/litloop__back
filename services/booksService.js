@@ -44,31 +44,43 @@ const getBooksFromGoogle = async (query, category, year) => {
 const getPopularBooks = async () => {
   const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
   const url = "https://www.googleapis.com/books/v1/volumes";
+  const uniqueBooks = [];
+  const ids = new Set();
+  let totalFetched = 0;
 
   try {
-    const response = await axios.get(url, {
-      params: {
-        q: "books",
-        orderBy: "newest",
-        maxResults: 21,
-        key: apiKey,
-      },
-    });
+    while (uniqueBooks.length < 28) {
+      const response = await axios.get(url, {
+        params: {
+          q: "books",
+          orderBy: "newest",
+          maxResults: 40, 
+          key: apiKey,
+          startIndex: totalFetched, 
+        },
+      });
 
-    const uniqueBooks = [];
-    const ids = new Set();
+      response.data.items.forEach((book) => {
+        if (!ids.has(book.id) && uniqueBooks.length < 28) {
+          ids.add(book.id);
+          uniqueBooks.push(book);
+        }
+      });
 
-    response.data.items.forEach((book) => {
-      if (!ids.has(book.id)) {
-        ids.add(book.id);
-        uniqueBooks.push(book);
+      totalFetched += response.data.items.length;
+
+      
+      if (response.data.items.length === 0) {
+        break;
       }
-    });
+    }
+
     return uniqueBooks;
   } catch (error) {
     throw new Error("Error al consultar Google Books API");
   }
 };
+
 
 const getBookById = async (id) => {
   const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
