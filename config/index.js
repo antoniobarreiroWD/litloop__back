@@ -6,9 +6,9 @@ const cookieParser = require("cookie-parser");
 
 const cors = require("cors");
 
-const FRONTEND_URL = (process.env.FRONTEND_URL || "https://litloop-front.vercel.app")
-  .split(',')
-  .map((url) => url.trim());
+const FRONTEND_URL = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map((url) => url.trim())
+  : ['http://localhost:3000']; 
 
 module.exports = (app) => {
   app.set("trust proxy", 1);
